@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://predincub_exercise1/./src/index.js"],"names":[],"mappings":";;;;;;AAAA;AACA;;AAEA","file":"bundle.js","sourcesContent":["let taskContainer = document.querySelectorAll(\".list-group\"),\r\n  task = document.querySelector(\".list-group-item\");\r\n\r\ntaskContainer[1].append(task);\r\n"],"sourceRoot":""}
