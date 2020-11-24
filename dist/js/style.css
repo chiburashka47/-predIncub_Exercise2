@@ -1,0 +1,138 @@
+body {
+  height: 100vh;
+}
+
+.greeting {
+  width: 80%;
+  height: 100px;
+  border-radius: 22px;
+  background-color: rgba(18, 199, 63, 0.664);
+  color: #cacaca;
+  font-weight: 500;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.greeting__title {
+  font-size: 20px;
+}
+.greeting__text {
+  font-size: 16px;
+}
+
+.navbar__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 60%;
+}
+
+.nameShow {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.reg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 40px;
+}
+.reg__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #24ac2f70;
+  width: 800px;
+  border-radius: 20px;
+  justify-content: flex-start;
+}
+.reg__container__title {
+  font-size: 20px;
+  font-weight: 500;
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+.reg__container__row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-items: flex-start;
+  width: 40%;
+  padding-bottom: 20px;
+}
+.reg__container__row__text {
+  font-size: 12px;
+}
+.reg__container__row__input {
+  width: 100%;
+  border: none;
+  height: 28px;
+  border-radius: 4px;
+  outline: none;
+}
+.reg__container__error {
+  width: 40%;
+  font-size: 12px;
+  color: red;
+  padding-bottom: 10px;
+}
+.reg__container__btn {
+  margin-bottom: 40px;
+}
+
+.setting__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  align-items: baseline;
+  width: 200px;
+}
+.setting__container__row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid black;
+  padding: 5px 0;
+}
+.setting__container__row__key {
+  font-weight: 500;
+}
+.setting__container__row__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.setting__container__row__container__slash {
+  padding: 0 10px;
+  font-weight: 500;
+}
+.setting__container__row__container__elem {
+  padding: 0 2px;
+  cursor: pointer;
+}
+.setting__container__row__container .activeBtn {
+  background-color: #009e77;
+  border-color: #009e77;
+}
+
+.hide {
+  display: none;
+}
+
+/*# sourceMappingURL=style.css.map*/

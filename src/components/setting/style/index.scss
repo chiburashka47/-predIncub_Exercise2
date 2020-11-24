@@ -1,0 +1,36 @@
+.setting__container {
+  @include flex-col();
+  padding: 10px;
+  align-items: baseline;
+  width: 200px;
+
+  &__row {
+    @include flex-row();
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid black;
+
+    padding: 5px 0;
+
+    &__key {
+      font-weight: 500;
+    }
+    &__container {
+      @include flex-row();
+
+      &__slash {
+        padding: 0 10px;
+        font-weight: 500;
+      }
+      &__elem {
+        padding: 0 2px;
+        cursor: pointer;
+      }
+
+      .activeBtn {
+        background-color: rgb(0, 158, 119);
+        border-color: rgb(0, 158, 119);
+      }
+    }
+  }
+}

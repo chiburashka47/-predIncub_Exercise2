@@ -1,0 +1,51 @@
+.reg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 40px;
+
+  &__container {
+    @include flex-col();
+    background-color: #24ac2f70;
+    width: 800px;
+    border-radius: 20px;
+    justify-content: flex-start;
+
+    &__title {
+      font-size: 20px;
+      font-weight: 500;
+      padding-top: 40px;
+      padding-bottom: 30px;
+    }
+
+    &__row {
+      @include flex-col();
+      align-items: flex-start;
+      width: 40%;
+      padding-bottom: 20px;
+
+      &__text {
+        font-size: 12px;
+      }
+      &__input {
+        width: 100%;
+        border: none;
+        height: 28px;
+        border-radius: 4px;
+        outline: none;
+      }
+    }
+
+    &__error {
+      width: 40%;
+      font-size: 12px;
+      color: red;
+      padding-bottom: 10px;
+    }
+
+    &__btn {
+      margin-bottom: 40px;
+    }
+  }
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo List</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="../dist/js/style.css" />
+  </head>
+  <body>
+    <div class="container-fluid wrapper">
+      <nav class="navbar navbar-light bg-light">
+        <h1>MyToDoList</h1>
+
+        <button id="back" type="button" class="btn btn-primary register">
+          Back
+        </button>
+      </nav>
+    <div class="reg">
+        <div class="reg__container">
+            <span class="reg__container__title">Registration</span>
+            <span class="reg__container__row">
+                <span class="reg__container__row__text">Name</span>
+                <input id="name" class="reg__container__row__input "></input>
+            </span>
+            <span class="reg__container__row">
+                <span class="reg__container__row__text">Email</span>
+                <input id="email" class="reg__container__row__input "></input>
+            </span>
+            <span class="reg__container__row">
+                <span class="reg__container__row__text">Password</span>
+                <input id="pasword" class="reg__container__row__input "></input>
+            </span>
+            <span class="reg__container__row">
+                <span class="reg__container__row__text">Repeat password
+                </span>
+                <input id="repPasword" class="reg__container__row__input "></input>
+            </span>
+            <span class="reg__container__error hide"></span>
+            <div class="btn btn-primary reg__container__btn">Registration</div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <script
+      type="module"
+      src="../src/components/regestration/regPage.js"
+      async
+    ></script>
+  </body>
+</html>

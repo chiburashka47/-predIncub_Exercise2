@@ -1,4 +1,20 @@
-let taskContainer = document.querySelectorAll(".list-group"),
-  task = document.querySelector(".list-group-item");
+import "../style/index.scss";
+import "./components/regestration/index";
+import "./components/setting/index";
 
-taskContainer[1].append(task);
+let signOutBtn = document.getElementById("signOut");
+
+signOutBtn.addEventListener("click", () => {
+  window.sessionStorage.clear();
+  window.location = "/";
+});
+
+window.addEventListener("load", () => {
+  window.sessionStorage.getItem("theme")
+    ? ""
+    : window.sessionStorage.setItem("theme", "white");
+
+  window.sessionStorage.getItem("lang")
+    ? ""
+    : window.sessionStorage.setItem("lang", "en");
+});
