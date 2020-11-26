@@ -1,3 +1,5 @@
+const { changeLang } = require("../..");
+
 let whiteBtn = document.getElementById("themeWhite"),
   blackBtn = document.getElementById("themeBlack"),
   enBtn = document.getElementById("langEn"),
@@ -41,8 +43,10 @@ blackBtn.addEventListener("click", () => {
 enBtn.addEventListener("click", () => {
   window.sessionStorage.setItem("lang", "en");
   changeElem(enBtn, ruBtn);
+  changeLang("en");
 });
 ruBtn.addEventListener("click", () => {
   window.sessionStorage.setItem("lang", "ru");
   changeElem(ruBtn, enBtn);
+  changeLang("ru");
 });

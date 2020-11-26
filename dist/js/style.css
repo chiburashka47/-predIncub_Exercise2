@@ -7,7 +7,6 @@ body {
   height: 100px;
   border-radius: 22px;
   background-color: rgba(18, 199, 63, 0.664);
-  color: #cacaca;
   font-weight: 500;
   margin-top: 40px;
   display: flex;
@@ -38,18 +37,25 @@ body {
   margin-right: 10px;
 }
 
+.task__color {
+  padding: 0;
+}
+
 .reg {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 40px;
+  margin-top: 40px;
+  position: relative;
 }
 .reg__container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 40px;
   background-color: #24ac2f70;
   width: 800px;
   border-radius: 20px;
@@ -88,6 +94,9 @@ body {
 }
 .reg__container__btn {
   margin-bottom: 40px;
+}
+.reg__container__btn__container {
+  width: 40%;
 }
 
 .setting__container {

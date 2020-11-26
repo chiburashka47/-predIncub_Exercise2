@@ -23,28 +23,44 @@
         </button>
       </nav>
     <div class="reg">
-        <div class="reg__container">
-            <span class="reg__container__title">Registration</span>
-            <span class="reg__container__row">
-                <span class="reg__container__row__text">Name</span>
-                <input id="name" class="reg__container__row__input "></input>
-            </span>
+        <div id="signContainer" class="reg__container ">
+            <span class="reg__container__title">Sign in</span>
             <span class="reg__container__row">
                 <span class="reg__container__row__text">Email</span>
-                <input id="email" class="reg__container__row__input "></input>
+                <input id="signEmail" class="reg__container__row__input "></input>
             </span>
             <span class="reg__container__row">
                 <span class="reg__container__row__text">Password</span>
-                <input id="pasword" class="reg__container__row__input "></input>
+                <input id="signPassword" class="reg__container__row__input "></input>
             </span>
-            <span class="reg__container__row">
-                <span class="reg__container__row__text">Repeat password
-                </span>
-                <input id="repPasword" class="reg__container__row__input "></input>
-            </span>
-            <span class="reg__container__error hide"></span>
-            <div class="btn btn-primary reg__container__btn">Registration</div>
+            <span class="reg__container__error "></span>
+            <div class="d-flex reg__container__btn__container justify-content-between">
+              <div id="signIn" class="btn btn-primary reg__container__btn">Sign in</div>
+              <div id="goReg" class="btn btn-primary reg__container__btn">Registration</div>
+            </div>
         </div>
+        <div id="regContainer" class="reg__container hide">
+          <span class="reg__container__title">Registration</span>
+          <span class="reg__container__row">
+              <span class="reg__container__row__text">Name</span>
+              <input id="name" class="reg__container__row__input "></input>
+          </span>
+          <span class="reg__container__row">
+              <span class="reg__container__row__text">Email</span>
+              <input id="email" class="reg__container__row__input "></input>
+          </span>
+          <span class="reg__container__row">
+              <span class="reg__container__row__text">Password</span>
+              <input id="password" class="reg__container__row__input "></input>
+          </span>
+          <span class="reg__container__row">
+              <span class="reg__container__row__text">Repeat password
+              </span>
+              <input id="repPasword" class="reg__container__row__input "></input>
+          </span>
+          <span class="reg__container__error hide"></span>
+          <div id="endReg" class="btn btn-primary reg__container__btn">Registration</div>
+      </div>
     </div>
     </div>
     </div>

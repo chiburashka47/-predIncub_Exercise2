@@ -3,10 +3,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 40px;
+  margin-top: 40px;
+  position: relative;
 
   &__container {
     @include flex-col();
+    position: absolute;
+    top: 40px;
     background-color: #24ac2f70;
     width: 800px;
     border-radius: 20px;
@@ -46,6 +49,10 @@
 
     &__btn {
       margin-bottom: 40px;
+
+      &__container {
+        width: 40%;
+      }
     }
   }
 }
