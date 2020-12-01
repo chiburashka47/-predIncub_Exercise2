@@ -1,4 +1,4 @@
-export const saveTasksInLocalStorage = (conter, elem) => {
+export const saveTasksInLocalStorage = () => {
   const tasks = [];
   let arr = currentTasks.querySelectorAll("li");
 

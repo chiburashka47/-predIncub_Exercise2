@@ -61,6 +61,14 @@ body {
   margin: 5px 0 0 10px;
 }
 
+.list-group {
+  min-height: 100px;
+}
+
+.parent {
+  border-width: 1px !important;
+}
+
 @import "../src/components/regestration/style/index.scss";
 @import "../src/components/setting/style/index.scss";
 

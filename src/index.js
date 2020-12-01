@@ -4,6 +4,8 @@ import { langData } from "./components/regestration/usersData";
 import "./components/setting/index";
 import "./components/createTask/index";
 import "./components/createTask/refreshForm";
+import { dragAndDrop } from "./components/dragAndDrop/dragAndDrop";
+import { resetData } from "./components/createTask/refreshForm";
 
 let signOutBtn = document.getElementById("signOut"),
   logo = document.getElementsByTagName("h1"),
@@ -71,4 +73,6 @@ window.addEventListener("load", () => {
   if (window.sessionStorage.getItem("lang") == "ru") {
     changeLang("ru");
   }
+  dragAndDrop();
+  resetData();
 });

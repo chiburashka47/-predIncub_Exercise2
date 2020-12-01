@@ -1,4 +1,6 @@
+import { dragAndDrop } from "../dragAndDrop/dragAndDrop";
 import { counterCompletedTasks, counterCurrentTasks } from "./counterTask";
+import { resetData } from "./refreshForm";
 import { saveTasksInLocalStorage } from "./saveTasksInLocalStorage";
 
 const { langData } = require("../regestration/usersData");
@@ -66,7 +68,7 @@ const createTask = (title, text, prior, color) => {
   currentTasks.insertAdjacentHTML(
     "beforeend",
     `
-        <li data-id=${counter++}  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
+        <li draggable="true" data-id=${counter++}  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
         <div class="w-100 mr-2">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1 task__title">${title}</h5>
@@ -104,14 +106,16 @@ const createTask = (title, text, prior, color) => {
   );
 };
 
-export const clearForm = () => {
+export function clearForm() {
   titleInput.value = "";
   textInput.value = "";
   lowInput.checked = false;
   mediumInput.checked = false;
   highInput.checked = false;
   colorInput.value = "#ffffff";
-};
+  createTaskBtn.textContent = langData[getCurrentLang].addTask;
+  exampleModalLabel.textContent = langData[getCurrentLang].addTask;
+}
 
 createTaskBtn.addEventListener("click", () => {
   let checked = lowInput.checked
@@ -134,6 +138,7 @@ createTaskBtn.addEventListener("click", () => {
   }, 100);
 
   addListsnersOnTaskBtn();
+  dragAndDrop();
 });
 
 sortBtn.addEventListener("click", () => {
@@ -144,7 +149,7 @@ sortBtn.addEventListener("click", () => {
   );
 });
 
-const addListsnersOnTaskBtn = () => {
+export const addListsnersOnTaskBtn = () => {
   currentTasks.addEventListener("click", (elem) => {
     if (elem.target.id === "deleteBtn") {
       deleteTask(elem.target);

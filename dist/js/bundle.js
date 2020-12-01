@@ -80,6 +80,7 @@ const getDate = () => {
   !*** ./src/components/createTask/index.js ***!
   \********************************************/
 /*! namespace exports */
+/*! export addListsnersOnTaskBtn [provided] [no usage info] [missing usage info prevents renaming] */
 /*! export clearForm [provided] [no usage info] [missing usage info prevents renaming] */
 /*! export hideTaskCompleteBtn [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
@@ -90,10 +91,15 @@ const getDate = () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "hideTaskCompleteBtn": () => /* binding */ hideTaskCompleteBtn,
-/* harmony export */   "clearForm": () => /* binding */ clearForm
+/* harmony export */   "clearForm": () => /* binding */ clearForm,
+/* harmony export */   "addListsnersOnTaskBtn": () => /* binding */ addListsnersOnTaskBtn
 /* harmony export */ });
-/* harmony import */ var _counterTask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./counterTask */ "./src/components/createTask/counterTask.js");
-/* harmony import */ var _saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./saveTasksInLocalStorage */ "./src/components/createTask/saveTasksInLocalStorage.js");
+/* harmony import */ var _dragAndDrop_dragAndDrop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dragAndDrop/dragAndDrop */ "./src/components/dragAndDrop/dragAndDrop.js");
+/* harmony import */ var _counterTask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./counterTask */ "./src/components/createTask/counterTask.js");
+/* harmony import */ var _refreshForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./refreshForm */ "./src/components/createTask/refreshForm.js");
+/* harmony import */ var _saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./saveTasksInLocalStorage */ "./src/components/createTask/saveTasksInLocalStorage.js");
+
+
 
 
 
@@ -162,7 +168,7 @@ const createTask = (title, text, prior, color) => {
   currentTasks.insertAdjacentHTML(
     "beforeend",
     `
-        <li data-id=${counter++}  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
+        <li draggable="true" data-id=${counter++}  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
         <div class="w-100 mr-2">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1 task__title">${title}</h5>
@@ -200,14 +206,16 @@ const createTask = (title, text, prior, color) => {
   );
 };
 
-const clearForm = () => {
+function clearForm() {
   titleInput.value = "";
   textInput.value = "";
   lowInput.checked = false;
   mediumInput.checked = false;
   highInput.checked = false;
   colorInput.value = "#ffffff";
-};
+  createTaskBtn.textContent = langData[getCurrentLang].addTask;
+  exampleModalLabel.textContent = langData[getCurrentLang].addTask;
+}
 
 createTaskBtn.addEventListener("click", () => {
   let checked = lowInput.checked
@@ -225,11 +233,12 @@ createTaskBtn.addEventListener("click", () => {
 
   setTimeout(() => {
     createTaskBtn.setAttribute("data-dismiss", "");
-    (0,_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCurrentTasks)();
-    (0,_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_1__.saveTasksInLocalStorage)();
+    (0,_counterTask__WEBPACK_IMPORTED_MODULE_1__.counterCurrentTasks)();
+    (0,_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_3__.saveTasksInLocalStorage)();
   }, 100);
 
   addListsnersOnTaskBtn();
+  (0,_dragAndDrop_dragAndDrop__WEBPACK_IMPORTED_MODULE_0__.dragAndDrop)();
 });
 
 sortBtn.addEventListener("click", () => {
@@ -255,13 +264,13 @@ const addListsnersOnTaskBtn = () => {
     }
 
     hideTaskCompleteBtn();
-    (0,_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCurrentTasks)();
-    (0,_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCompletedTasks)();
+    (0,_counterTask__WEBPACK_IMPORTED_MODULE_1__.counterCurrentTasks)();
+    (0,_counterTask__WEBPACK_IMPORTED_MODULE_1__.counterCompletedTasks)();
   });
 
   completedTasks.addEventListener("click", (elem) => {
     if (elem.target.id === "deleteBtn") deleteTask(elem.target);
-    (0,_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCompletedTasks)();
+    (0,_counterTask__WEBPACK_IMPORTED_MODULE_1__.counterCompletedTasks)();
   });
 };
 
@@ -272,37 +281,47 @@ const addListsnersOnTaskBtn = () => {
 /*!**************************************************!*\
   !*** ./src/components/createTask/refreshForm.js ***!
   \**************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: __webpack_require__ */
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/*! namespace exports */
+/*! export resetData [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "resetData": () => /* binding */ resetData
+/* harmony export */ });
 const { clearForm } = __webpack_require__(/*! . */ "./src/components/createTask/index.js");
+const { langData } = __webpack_require__(/*! ../regestration/usersData */ "./src/components/regestration/usersData.js");
 
 const btnClose = document.getElementById("closeBtn"),
   createTaskBtn = document.getElementById("createTask"),
   exampleModalLabel = document.getElementById("exampleModalLabel");
 
-(function resetData() {
+const getCurrentLang = window.sessionStorage.getItem("lang");
+
+const resetData = () => {
   btnClose.addEventListener("click", () => {
-    createTaskBtn.textContent = "Add task";
-    exampleModalLabel.textContent = "Add task";
+    createTaskBtn.textContent = langData[getCurrentLang].addTask;
+    exampleModalLabel.textContent = langData[getCurrentLang].addTask;
     clearForm();
   });
 
   document.body.addEventListener("click", (event) => {
     if (event.target.id === "exampleModal") {
-      createTaskBtn.textContent = "Add task";
-      exampleModalLabel.textContent = "Add task";
+      createTaskBtn.textContent = langData[getCurrentLang].addTask;
+      exampleModalLabel.textContent = langData[getCurrentLang].addTask;
       clearForm();
     }
   });
 
   document.querySelector(".close").addEventListener("click", () => {
-    createTaskBtn.textContent = "Add task";
-    exampleModalLabel.textContent = "Add task";
+    createTaskBtn.textContent = langData[getCurrentLang].addTask;
+    exampleModalLabel.textContent = langData[getCurrentLang].addTask;
     clearForm();
   });
-})();
+};
 
 
 /***/ }),
@@ -358,7 +377,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "saveTasksInLocalStorage": () => /* binding */ saveTasksInLocalStorage
 /* harmony export */ });
-const saveTasksInLocalStorage = (conter, elem) => {
+const saveTasksInLocalStorage = () => {
   const tasks = [];
   let arr = currentTasks.querySelectorAll("li");
 
@@ -374,6 +393,80 @@ const saveTasksInLocalStorage = (conter, elem) => {
   );
 
   window.localStorage.setItem(`tasksData`, JSON.stringify(tasks));
+};
+
+
+/***/ }),
+
+/***/ "./src/components/dragAndDrop/dragAndDrop.js":
+/*!***************************************************!*\
+  !*** ./src/components/dragAndDrop/dragAndDrop.js ***!
+  \***************************************************/
+/*! namespace exports */
+/*! export dragAndDrop [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "dragAndDrop": () => /* binding */ dragAndDrop
+/* harmony export */ });
+/* harmony import */ var _createTask_counterTask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createTask/counterTask */ "./src/components/createTask/counterTask.js");
+/* harmony import */ var _createTask_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../createTask/saveTasksInLocalStorage */ "./src/components/createTask/saveTasksInLocalStorage.js");
+/* harmony import */ var _createTask_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../createTask/index */ "./src/components/createTask/index.js");
+
+
+
+
+const dragAndDrop = () => {
+  const currentTasks = document.getElementById("currentTasks"),
+    completedTasks = document.getElementById("completedTasks"),
+    list = currentTasks.querySelectorAll("li");
+
+  completedTasks.ondragover = allowDrop;
+  currentTasks.ondragover = allowDrop;
+
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+
+  function drag(event) {
+    event.dataTransfer.setData("id", event.target.dataset.id);
+  }
+
+  [...list].map((item) => {
+    item.ondragstart = drag;
+  });
+
+  completedTasks.ondrop = drop;
+  currentTasks.ondrop = drop;
+
+  function drop(event) {
+    let item;
+    if (
+      event.target.closest(".list-group") == completedTasks
+        ? (item = completedTasks)
+        :  false || event.target.closest(".list-group") == currentTasks
+        ? (item = currentTasks)
+        : false
+    ) {
+      let id = event.dataTransfer.getData("id");
+      let currentElem;
+      [...list].map((elem) => {
+        elem.dataset.id == id ? (currentElem = elem) : "";
+      });
+      item.append(currentElem);
+
+      setTimeout(() => {
+        (0,_createTask_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_1__.saveTasksInLocalStorage)();
+      }, 100);
+      (0,_createTask_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCurrentTasks)();
+      (0,_createTask_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCompletedTasks)();
+      (0,_createTask_index__WEBPACK_IMPORTED_MODULE_2__.addListsnersOnTaskBtn)();
+    }
+  }
 };
 
 
@@ -575,7 +668,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_setting_index__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_components_setting_index__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _components_createTask_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/createTask/index */ "./src/components/createTask/index.js");
 /* harmony import */ var _components_createTask_refreshForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/createTask/refreshForm */ "./src/components/createTask/refreshForm.js");
-/* harmony import */ var _components_createTask_refreshForm__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_components_createTask_refreshForm__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _components_dragAndDrop_dragAndDrop__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/dragAndDrop/dragAndDrop */ "./src/components/dragAndDrop/dragAndDrop.js");
+
+
 
 
 
@@ -649,6 +744,8 @@ window.addEventListener("load", () => {
   if (window.sessionStorage.getItem("lang") == "ru") {
     changeLang("ru");
   }
+  (0,_components_dragAndDrop_dragAndDrop__WEBPACK_IMPORTED_MODULE_6__.dragAndDrop)();
+  (0,_components_createTask_refreshForm__WEBPACK_IMPORTED_MODULE_5__.resetData)();
 });
 
 
