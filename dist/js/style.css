@@ -41,6 +41,17 @@ body {
   padding: 0;
 }
 
+.counter__container {
+  display: flex;
+  align-items: center;
+}
+
+.counter__tasks {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px 0 0 10px;
+}
+
 .reg {
   width: 100%;
   display: flex;

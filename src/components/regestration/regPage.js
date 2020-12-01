@@ -14,7 +14,9 @@ let backBtn = document.getElementById("back"),
   regContainer = document.getElementById("regContainer"),
   errorMsg = document.querySelectorAll(".reg__container__error");
 
-const userData = JSON.parse(window.localStorage.getItem("data"))[0];
+const userData = window.localStorage.getItem("data")
+  ? JSON.parse(window.localStorage.getItem("data"))[0]
+  : "";
 
 backBtn.addEventListener("click", () => {
   window.location = "/";

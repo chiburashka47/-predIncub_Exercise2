@@ -44,7 +44,7 @@ export const langData = {
     signIn: "Sign in",
     registration: "Registration",
     toDo: "Todo",
-    complited: "Complited",
+    complited: "Completed",
     back: "Back",
     greetingTitle: "Hello",
     close: "Close",

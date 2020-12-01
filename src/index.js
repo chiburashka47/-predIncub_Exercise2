@@ -3,6 +3,7 @@ import "./components/regestration/index";
 import { langData } from "./components/regestration/usersData";
 import "./components/setting/index";
 import "./components/createTask/index";
+import "./components/createTask/refreshForm";
 
 let signOutBtn = document.getElementById("signOut"),
   logo = document.getElementsByTagName("h1"),

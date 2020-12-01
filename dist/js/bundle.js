@@ -17,13 +17,89 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/components/createTask/counterTask.js":
+/*!**************************************************!*\
+  !*** ./src/components/createTask/counterTask.js ***!
+  \**************************************************/
+/*! namespace exports */
+/*! export counterCompletedTasks [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export counterCurrentTasks [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "counterCurrentTasks": () => /* binding */ counterCurrentTasks,
+/* harmony export */   "counterCompletedTasks": () => /* binding */ counterCompletedTasks
+/* harmony export */ });
+const counterCurrentTasks = () => {
+  const text = document.getElementById("curentTaskCounter"),
+    count = document.getElementById("currentTasks").children.length;
+  text.textContent = ` - ( ${count} )`;
+};
+const counterCompletedTasks = () => {
+  const text = document.getElementById("completeTaskCounter"),
+    count = document.getElementById("completedTasks").children.length;
+  text.textContent = ` - ( ${count} )`;
+};
+
+
+/***/ }),
+
+/***/ "./src/components/createTask/getDate.js":
+/*!**********************************************!*\
+  !*** ./src/components/createTask/getDate.js ***!
+  \**********************************************/
+/*! namespace exports */
+/*! export getDate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getDate": () => /* binding */ getDate
+/* harmony export */ });
+const getDate = () => {
+  let today = new Date();
+  let date = `${today.getDate()}.${today.getMonth()}.${today.getFullYear()}`;
+  let time = `${today.getHours()}:${
+    today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes()
+  }`;
+  return `${time} ${date}`;
+};
+
+
+/***/ }),
+
 /***/ "./src/components/createTask/index.js":
 /*!********************************************!*\
   !*** ./src/components/createTask/index.js ***!
   \********************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements:  */
-/***/ (() => {
+/*! namespace exports */
+/*! export clearForm [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export hideTaskCompleteBtn [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "hideTaskCompleteBtn": () => /* binding */ hideTaskCompleteBtn,
+/* harmony export */   "clearForm": () => /* binding */ clearForm
+/* harmony export */ });
+/* harmony import */ var _counterTask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./counterTask */ "./src/components/createTask/counterTask.js");
+/* harmony import */ var _saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./saveTasksInLocalStorage */ "./src/components/createTask/saveTasksInLocalStorage.js");
+
+
+
+const { langData } = __webpack_require__(/*! ../regestration/usersData */ "./src/components/regestration/usersData.js");
+const { getDate } = __webpack_require__(/*! ./getDate */ "./src/components/createTask/getDate.js");
+const { getHexRGBColor } = __webpack_require__(/*! ./rgbToHex */ "./src/components/createTask/rgbToHex.js");
 
 const titleInput = document.getElementById("inputTitle"),
   textInput = document.getElementById("inputText"),
@@ -34,26 +110,68 @@ const titleInput = document.getElementById("inputTitle"),
   currentTasks = document.getElementById("currentTasks"),
   completedTasks = document.getElementById("completedTasks"),
   form = document.getElementById("form"),
+  sortBtn = document.getElementById("sortBtn"),
+  exampleModalLabel = document.getElementById("exampleModalLabel"),
   colorInput = document.querySelector(".task__color");
 
+let counter = 0;
+
+const getCurrentLang = window.sessionStorage.getItem("lang");
+
 form.addEventListener("submit", (event) => event.preventDefault());
+
+const deleteTask = (elem) => {
+  elem.closest(".parent").remove();
+};
+
+const completeTask = (elem) => {
+  completedTasks.insertAdjacentElement("beforeend", elem.closest(".parent"));
+};
+
+const editTask = (elem) => {
+  const container = elem.closest(".parent"),
+    priority = container
+      .querySelector(".task__prior")
+      .textContent.replace(/ .*/, "");
+  titleInput.value = container.querySelector(".task__title").textContent;
+  textInput.value = container.querySelector(".task__text").textContent;
+  colorInput.value = getHexRGBColor(container.style.backgroundColor);
+
+  if (priority == lowInput.value) {
+    lowInput.checked = true;
+  } else if (priority == mediumInput.value) {
+    mediumInput.checked = true;
+  } else if (priority == highInput.value) {
+    highInput.checked = true;
+  }
+  createTaskBtn.textContent = langData[getCurrentLang].edit;
+  exampleModalLabel.textContent = langData[getCurrentLang].edit;
+
+  createTaskBtn.addEventListener("click", function () {
+    container.remove();
+  });
+};
+
+const hideTaskCompleteBtn = () => {
+  completedTasks
+    .querySelectorAll("#editBtn, #completeBtn")
+    .forEach((btn) => btn.classList.add("hide"));
+};
 
 const createTask = (title, text, prior, color) => {
   currentTasks.insertAdjacentHTML(
     "beforeend",
     `
-        <li style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
+        <li data-id=${counter++}  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
         <div class="w-100 mr-2">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">${title}</h5>
+            <h5 class="mb-1 task__title">${title}</h5>
             <div>
-              <small class="mr-2">${prior} priority</small>
-              <small>11:00 01.01.2000</small>
+              <small class="mr-2 task__prior">${prior} priority</small>
+              <small class="task__date">${getDate()}</small>
             </div>
           </div>
-          <p class="mb-1 w-100">
-           ${text}
-          </p>
+          <p class="mb-1 w-100 task__text">${text}</p>
         </div>
         <div class="dropdown m-2 dropleft">
           <button class="btn btn-secondary h-100" type="button" id="dropdownMenuItem1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -66,9 +184,15 @@ const createTask = (title, text, prior, color) => {
               left: 0px;
               transform: translate3d(-2px, 0px, 0px);
             ">
-            <button id="completeBtn" type="button" class="btn btn-success w-100">Завершить</button>
-            <button data-target="#exampleModal" data-toggle="modal" id="editBtn" type="button" class="btn btn-info w-100 my-2">Изменить</button>
-            <button id="deleteBtn" type="button" class="btn btn-danger w-100">Удалить</button>
+            <button id="completeBtn" type="button" class="btn btn-success w-100">${
+              langData[getCurrentLang].complete
+            }</button>
+            <button data-target="#exampleModal" data-toggle="modal" id="editBtn" type="button" class="btn btn-info w-100 my-2">${
+              langData[getCurrentLang].edit
+            }</button>
+            <button id="deleteBtn" type="button" class="btn btn-danger w-100">${
+              langData[getCurrentLang].delete
+            }</button>
           </div>
         </div>
       </li>
@@ -82,6 +206,7 @@ const clearForm = () => {
   lowInput.checked = false;
   mediumInput.checked = false;
   highInput.checked = false;
+  colorInput.value = "#ffffff";
 };
 
 createTaskBtn.addEventListener("click", () => {
@@ -97,18 +222,159 @@ createTaskBtn.addEventListener("click", () => {
     createTaskBtn.setAttribute("data-dismiss", "modal");
     clearForm();
   }
-  const editBtn = document.getElementById("editBtn"),
-    completeBtn = document.getElementById("completeBtn"),
-    deleteBtn = document.getElementById("deleteBtn");
-
-  editBtn.addEventListener("click", (elem) => {
-    console.log(elem.target.closest(".parent"));
-  });
 
   setTimeout(() => {
     createTaskBtn.setAttribute("data-dismiss", "");
-  }, 1000);
+    (0,_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCurrentTasks)();
+    (0,_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_1__.saveTasksInLocalStorage)();
+  }, 100);
+
+  addListsnersOnTaskBtn();
 });
+
+sortBtn.addEventListener("click", () => {
+  let arrUL = [...currentTasks.querySelectorAll("li")];
+  let sortArrUL = arrUL.sort().reverse();
+  sortArrUL.forEach((elem) =>
+    currentTasks.insertAdjacentElement("beforeend", elem)
+  );
+});
+
+const addListsnersOnTaskBtn = () => {
+  currentTasks.addEventListener("click", (elem) => {
+    if (elem.target.id === "deleteBtn") {
+      deleteTask(elem.target);
+    }
+
+    if (elem.target.id === "completeBtn") {
+      completeTask(elem.target);
+    }
+
+    if (elem.target.id === "editBtn") {
+      editTask(elem.target);
+    }
+
+    hideTaskCompleteBtn();
+    (0,_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCurrentTasks)();
+    (0,_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCompletedTasks)();
+  });
+
+  completedTasks.addEventListener("click", (elem) => {
+    if (elem.target.id === "deleteBtn") deleteTask(elem.target);
+    (0,_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCompletedTasks)();
+  });
+};
+
+
+/***/ }),
+
+/***/ "./src/components/createTask/refreshForm.js":
+/*!**************************************************!*\
+  !*** ./src/components/createTask/refreshForm.js ***!
+  \**************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: __webpack_require__ */
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const { clearForm } = __webpack_require__(/*! . */ "./src/components/createTask/index.js");
+
+const btnClose = document.getElementById("closeBtn"),
+  createTaskBtn = document.getElementById("createTask"),
+  exampleModalLabel = document.getElementById("exampleModalLabel");
+
+(function resetData() {
+  btnClose.addEventListener("click", () => {
+    createTaskBtn.textContent = "Add task";
+    exampleModalLabel.textContent = "Add task";
+    clearForm();
+  });
+
+  document.body.addEventListener("click", (event) => {
+    if (event.target.id === "exampleModal") {
+      createTaskBtn.textContent = "Add task";
+      exampleModalLabel.textContent = "Add task";
+      clearForm();
+    }
+  });
+
+  document.querySelector(".close").addEventListener("click", () => {
+    createTaskBtn.textContent = "Add task";
+    exampleModalLabel.textContent = "Add task";
+    clearForm();
+  });
+})();
+
+
+/***/ }),
+
+/***/ "./src/components/createTask/rgbToHex.js":
+/*!***********************************************!*\
+  !*** ./src/components/createTask/rgbToHex.js ***!
+  \***********************************************/
+/*! namespace exports */
+/*! export getHexRGBColor [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getHexRGBColor": () => /* binding */ getHexRGBColor
+/* harmony export */ });
+function getHexRGBColor(color) {
+  color = color.replace(/\s/g, "");
+  var aRGB = color.match(/^rgb\((\d{1,3}[%]?),(\d{1,3}[%]?),(\d{1,3}[%]?)\)$/i);
+
+  if (aRGB) {
+    color = "";
+    for (var i = 1; i <= 3; i++)
+      color += Math.round(
+        (aRGB[i][aRGB[i].length - 1] == "%" ? 2.55 : 1) * parseInt(aRGB[i])
+      )
+        .toString(16)
+        .replace(/^(.)$/, "0$1");
+  } else
+    color = color.replace(/^#?([\da-f])([\da-f])([\da-f])$/i, "$1$1$2$2$3$3");
+
+  return "#" + color;
+}
+
+
+/***/ }),
+
+/***/ "./src/components/createTask/saveTasksInLocalStorage.js":
+/*!**************************************************************!*\
+  !*** ./src/components/createTask/saveTasksInLocalStorage.js ***!
+  \**************************************************************/
+/*! namespace exports */
+/*! export saveTasksInLocalStorage [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "saveTasksInLocalStorage": () => /* binding */ saveTasksInLocalStorage
+/* harmony export */ });
+const saveTasksInLocalStorage = (conter, elem) => {
+  const tasks = [];
+  let arr = currentTasks.querySelectorAll("li");
+
+  [...arr].map((li) =>
+    tasks.push({
+      counter: li.dataset.id,
+      backgroundColor: li.style.backgroundColor,
+      title: li.querySelector(".task__title").textContent,
+      text: li.querySelector(".task__text").textContent,
+      priority: li.querySelector(".task__prior").textContent,
+      date: li.querySelector(".task__date").textContent,
+    })
+  );
+
+  window.localStorage.setItem(`tasksData`, JSON.stringify(tasks));
+};
 
 
 /***/ }),
@@ -207,7 +473,7 @@ const langData = {
     signIn: "Sign in",
     registration: "Registration",
     toDo: "Todo",
-    complited: "Complited",
+    complited: "Completed",
     back: "Back",
     greetingTitle: "Hello",
     close: "Close",
@@ -308,7 +574,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_setting_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/setting/index */ "./src/components/setting/index.js");
 /* harmony import */ var _components_setting_index__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_components_setting_index__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _components_createTask_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/createTask/index */ "./src/components/createTask/index.js");
-/* harmony import */ var _components_createTask_index__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_components_createTask_index__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _components_createTask_refreshForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/createTask/refreshForm */ "./src/components/createTask/refreshForm.js");
+/* harmony import */ var _components_createTask_refreshForm__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_components_createTask_refreshForm__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 

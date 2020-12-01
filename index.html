@@ -23,7 +23,7 @@
         <h1>MyToDoList</h1>
         <div class="navbar__container hide">
           <div class="d-flex">
-            <button type="button" class="btn btn-primary">
+            <button id="sortBtn" type="button" class="btn btn-primary">
               <i class="fas fa-sort-numeric-up" aria-hidden="true"></i>
             </button>
           </div>
@@ -119,13 +119,22 @@
       </nav>
       <div class="row justify-content-center">
         <div class="col-10 hide">
-          <h3 id="toDo" class="my-2">ToDo</h3>
+          <div class="counter__container">
+            <h3 id="toDo" class="my-2">ToDo</h3>
+            <span id="curentTaskCounter" class="counter__tasks"> - ( 0 )</span>
+          </div>
           <ul
             class="list-group flex-wrap justify-content-between"
             id="currentTasks"
           ></ul>
           <hr />
-          <h3 id="complited" class="my-2">Comleted</h3>
+
+          <div class="counter__container">
+            <h3 id="complited" class="my-2">Comleted</h3>
+            <span id="completeTaskCounter" class="counter__tasks">
+              - ( 0 )</span
+            >
+          </div>
           <ul
             class="list-group flex-wrap justify-content-between"
             id="completedTasks"
