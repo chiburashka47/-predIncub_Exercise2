@@ -41,11 +41,11 @@ const editTask = (elem) => {
   titleInput.value = container.querySelector(".task__title").textContent;
   textInput.value = container.querySelector(".task__text").textContent;
 
-  if (priority == lowInput.value) {
+  if (priority === lowInput.value) {
     lowInput.checked = true;
-  } else if (priority == mediumInput.value) {
+  } else if (priority === mediumInput.value) {
     mediumInput.checked = true;
-  } else if (priority == highInput.value) {
+  } else if (priority === highInput.value) {
     highInput.checked = true;
   }
   createTaskBtn.textContent = langData[getCurrentLang].edit;

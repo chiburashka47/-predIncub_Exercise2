@@ -144,11 +144,11 @@ const editTask = (elem) => {
   titleInput.value = container.querySelector(".task__title").textContent;
   textInput.value = container.querySelector(".task__text").textContent;
 
-  if (priority == lowInput.value) {
+  if (priority === lowInput.value) {
     lowInput.checked = true;
-  } else if (priority == mediumInput.value) {
+  } else if (priority === mediumInput.value) {
     mediumInput.checked = true;
-  } else if (priority == highInput.value) {
+  } else if (priority === highInput.value) {
     highInput.checked = true;
   }
   createTaskBtn.textContent = langData[getCurrentLang].edit;
@@ -677,17 +677,17 @@ const changePageColor = (color) => {
   mainPage.style.backgroundColor = color;
 };
 
-if (window.sessionStorage.getItem("theme") == "white") {
+if (window.sessionStorage.getItem("theme") === "white") {
   changeElem(whiteBtn, blackBtn);
   changePageColor("white");
-} else if (window.sessionStorage.getItem("theme") == "black") {
+} else if (window.sessionStorage.getItem("theme") === "black") {
   changeElem(blackBtn, whiteBtn);
   changePageColor("#cacaca");
 }
 
-if (window.sessionStorage.getItem("lang") == "en") {
+if (window.sessionStorage.getItem("lang") === "en") {
   changeElem(enBtn, ruBtn);
-} else if (window.sessionStorage.getItem("lang") == "ru") {
+} else if (window.sessionStorage.getItem("lang") === "ru") {
   changeElem(ruBtn, enBtn);
 }
 
@@ -807,10 +807,10 @@ window.addEventListener("load", () => {
     ? ""
     : window.sessionStorage.setItem("lang", "en");
 
-  if (window.sessionStorage.getItem("lang") == "en") {
+  if (window.sessionStorage.getItem("lang") === "en") {
     changeLang("en");
   }
-  if (window.sessionStorage.getItem("lang") == "ru") {
+  if (window.sessionStorage.getItem("lang") === "ru") {
     changeLang("ru");
   }
   (0,_components_dragAndDrop_dragAndDrop__WEBPACK_IMPORTED_MODULE_6__.dragAndDrop)();

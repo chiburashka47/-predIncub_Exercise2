@@ -18,7 +18,7 @@ backBtn.addEventListener("click", () => {
   window.location = "/";
 });
 const valueCheck = (elem) => {
-  if (elem.value == false) {
+  if (elem.value === false) {
     return true;
   }
 };

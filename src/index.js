@@ -65,10 +65,10 @@ window.addEventListener("load", () => {
     ? ""
     : window.sessionStorage.setItem("lang", "en");
 
-  if (window.sessionStorage.getItem("lang") == "en") {
+  if (window.sessionStorage.getItem("lang") === "en") {
     changeLang("en");
   }
-  if (window.sessionStorage.getItem("lang") == "ru") {
+  if (window.sessionStorage.getItem("lang") === "ru") {
     changeLang("ru");
   }
   dragAndDrop();

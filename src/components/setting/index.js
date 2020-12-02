@@ -15,17 +15,17 @@ const changePageColor = (color) => {
   mainPage.style.backgroundColor = color;
 };
 
-if (window.sessionStorage.getItem("theme") == "white") {
+if (window.sessionStorage.getItem("theme") === "white") {
   changeElem(whiteBtn, blackBtn);
   changePageColor("white");
-} else if (window.sessionStorage.getItem("theme") == "black") {
+} else if (window.sessionStorage.getItem("theme") === "black") {
   changeElem(blackBtn, whiteBtn);
   changePageColor("#cacaca");
 }
 
-if (window.sessionStorage.getItem("lang") == "en") {
+if (window.sessionStorage.getItem("lang") === "en") {
   changeElem(enBtn, ruBtn);
-} else if (window.sessionStorage.getItem("lang") == "ru") {
+} else if (window.sessionStorage.getItem("lang") === "ru") {
   changeElem(ruBtn, enBtn);
 }
 
