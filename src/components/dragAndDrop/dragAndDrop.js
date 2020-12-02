@@ -3,12 +3,17 @@ import {
   counterCurrentTasks,
 } from "../createTask/counterTask";
 import { saveTasksInLocalStorage } from "../createTask/saveTasksInLocalStorage";
-import { addListsnersOnTaskBtn } from "../createTask/index";
+import {
+  addListsnersOnTaskBtn,
+  hideTaskCompleteBtn,
+  showTaskCompleteBtn,
+} from "../createTask/index";
 
 export const dragAndDrop = () => {
   const currentTasks = document.getElementById("currentTasks"),
     completedTasks = document.getElementById("completedTasks"),
-    list = currentTasks.querySelectorAll("li");
+    list1 = currentTasks.querySelectorAll("li"),
+    list2 = completedTasks.querySelectorAll("li");
 
   completedTasks.ondragover = allowDrop;
   currentTasks.ondragover = allowDrop;
@@ -21,7 +26,10 @@ export const dragAndDrop = () => {
     event.dataTransfer.setData("id", event.target.dataset.id);
   }
 
-  [...list].map((item) => {
+  [...list1].map((item) => {
+    item.ondragstart = drag;
+  });
+  [...list2].map((item) => {
     item.ondragstart = drag;
   });
 
@@ -39,7 +47,10 @@ export const dragAndDrop = () => {
     ) {
       let id = event.dataTransfer.getData("id");
       let currentElem;
-      [...list].map((elem) => {
+      [...list1].map((elem) => {
+        elem.dataset.id == id ? (currentElem = elem) : "";
+      });
+      [...list2].map((elem) => {
         elem.dataset.id == id ? (currentElem = elem) : "";
       });
       item.append(currentElem);
@@ -47,6 +58,8 @@ export const dragAndDrop = () => {
       setTimeout(() => {
         saveTasksInLocalStorage();
       }, 100);
+      hideTaskCompleteBtn();
+      showTaskCompleteBtn();
       counterCurrentTasks();
       counterCompletedTasks();
       addListsnersOnTaskBtn();

@@ -12,7 +12,6 @@ let signOutBtn = document.getElementById("signOut"),
   greetingTitle = document.querySelector(".greeting__title"),
   greetingText = document.querySelector(".greeting__text"),
   closeText = document.querySelector(".close"),
-  taskColor = document.querySelector(".task__color__text"),
   closeBtn = document.getElementById("closeBtn"),
   addTask = document.querySelectorAll(".addTask__btn"),
   theme = document.getElementById("theme"),
@@ -52,7 +51,6 @@ export function changeLang(lang) {
   completeBtn ? (completeBtn.textContent = langData[lang].complete) : "";
   editBtn ? (editBtn.textContent = langData[lang].edit) : "";
   deleteBtn ? (deleteBtn.textContent = langData[lang].delete) : "";
-  taskColor.textContent = langData[lang].color;
   addTask.forEach((elem) => {
     elem.textContent = langData[lang].addTask;
   });

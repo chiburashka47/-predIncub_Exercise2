@@ -1,11 +1,9 @@
 import { dragAndDrop } from "../dragAndDrop/dragAndDrop";
 import { counterCompletedTasks, counterCurrentTasks } from "./counterTask";
-import { resetData } from "./refreshForm";
 import { saveTasksInLocalStorage } from "./saveTasksInLocalStorage";
 
 const { langData } = require("../regestration/usersData");
 const { getDate } = require("./getDate");
-const { getHexRGBColor } = require("./rgbToHex");
 
 const titleInput = document.getElementById("inputTitle"),
   textInput = document.getElementById("inputText"),
@@ -17,8 +15,7 @@ const titleInput = document.getElementById("inputTitle"),
   completedTasks = document.getElementById("completedTasks"),
   form = document.getElementById("form"),
   sortBtn = document.getElementById("sortBtn"),
-  exampleModalLabel = document.getElementById("exampleModalLabel"),
-  colorInput = document.querySelector(".task__color");
+  exampleModalLabel = document.getElementById("exampleModalLabel");
 
 let counter = 0;
 
@@ -28,10 +25,12 @@ form.addEventListener("submit", (event) => event.preventDefault());
 
 const deleteTask = (elem) => {
   elem.closest(".parent").remove();
+  saveTasksInLocalStorage();
 };
 
 const completeTask = (elem) => {
   completedTasks.insertAdjacentElement("beforeend", elem.closest(".parent"));
+  saveTasksInLocalStorage();
 };
 
 const editTask = (elem) => {
@@ -41,7 +40,6 @@ const editTask = (elem) => {
       .textContent.replace(/ .*/, "");
   titleInput.value = container.querySelector(".task__title").textContent;
   textInput.value = container.querySelector(".task__text").textContent;
-  colorInput.value = getHexRGBColor(container.style.backgroundColor);
 
   if (priority == lowInput.value) {
     lowInput.checked = true;
@@ -63,18 +61,33 @@ export const hideTaskCompleteBtn = () => {
     .querySelectorAll("#editBtn, #completeBtn")
     .forEach((btn) => btn.classList.add("hide"));
 };
+export const showTaskCompleteBtn = () => {
+  currentTasks
+    .querySelectorAll("#editBtn, #completeBtn")
+    .forEach((btn) => btn.classList.remove("hide"));
+};
 
-const createTask = (title, text, prior, color) => {
-  currentTasks.insertAdjacentHTML(
+export const createTask = (
+  container,
+  title,
+  text,
+  prior,
+  color,
+  index,
+  date
+) => {
+  container.insertAdjacentHTML(
     "beforeend",
     `
-        <li draggable="true" data-id=${counter++}  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
+        <li draggable="true" data-id=${
+          text + title
+        }  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
         <div class="w-100 mr-2">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1 task__title">${title}</h5>
             <div>
-              <small class="mr-2 task__prior">${prior} priority</small>
-              <small class="task__date">${getDate()}</small>
+              <small class="mr-2 task__prior">${prior}</small>
+              <small class="task__date">${date}</small>
             </div>
           </div>
           <p class="mb-1 w-100 task__text">${text}</p>
@@ -112,7 +125,6 @@ export function clearForm() {
   lowInput.checked = false;
   mediumInput.checked = false;
   highInput.checked = false;
-  colorInput.value = "#ffffff";
   createTaskBtn.textContent = langData[getCurrentLang].addTask;
   exampleModalLabel.textContent = langData[getCurrentLang].addTask;
 }
@@ -125,8 +137,20 @@ createTaskBtn.addEventListener("click", () => {
     : highInput.checked
     ? highInput.value
     : false;
+  let color = "#fbff65";
+  if (checked === "Medium") color = "#36b6ff";
+  else if (checked === "High") color = "#ff2050";
+  checked = checked + " priority";
   if (titleInput.value != "" && textInput.value != "" && checked) {
-    createTask(titleInput.value, textInput.value, checked, colorInput.value);
+    createTask(
+      currentTasks,
+      titleInput.value,
+      textInput.value,
+      checked,
+      color,
+      counter++,
+      getDate()
+    );
     createTaskBtn.setAttribute("data-dismiss", "modal");
     clearForm();
   }

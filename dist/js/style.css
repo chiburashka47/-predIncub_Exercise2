@@ -31,7 +31,7 @@ body {
   width: 60%;
 }
 
-.nameShow {
+.name__show {
   display: flex;
   align-items: center;
   margin-right: 10px;

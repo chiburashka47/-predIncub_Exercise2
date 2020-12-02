@@ -1,7 +1,16 @@
-let usersData = [];
+export let usersData = window.localStorage.getItem("data")
+  ? JSON.parse(window.localStorage.getItem("data"))
+  : [];
 
 export const saveData = (mail, name, password) => {
-  usersData.push({ mail: mail, name: name, password: password });
+  usersData.push({
+    [mail]: {
+      mail: mail,
+      name: name,
+      password: password,
+      tasks: { current: [], completed: [] },
+    },
+  });
 
   window.localStorage.setItem("data", JSON.stringify(usersData));
 };

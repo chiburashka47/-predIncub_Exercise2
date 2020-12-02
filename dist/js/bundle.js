@@ -82,7 +82,9 @@ const getDate = () => {
 /*! namespace exports */
 /*! export addListsnersOnTaskBtn [provided] [no usage info] [missing usage info prevents renaming] */
 /*! export clearForm [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export createTask [provided] [no usage info] [missing usage info prevents renaming] */
 /*! export hideTaskCompleteBtn [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export showTaskCompleteBtn [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
 /*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
@@ -91,21 +93,20 @@ const getDate = () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "hideTaskCompleteBtn": () => /* binding */ hideTaskCompleteBtn,
+/* harmony export */   "showTaskCompleteBtn": () => /* binding */ showTaskCompleteBtn,
+/* harmony export */   "createTask": () => /* binding */ createTask,
 /* harmony export */   "clearForm": () => /* binding */ clearForm,
 /* harmony export */   "addListsnersOnTaskBtn": () => /* binding */ addListsnersOnTaskBtn
 /* harmony export */ });
 /* harmony import */ var _dragAndDrop_dragAndDrop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dragAndDrop/dragAndDrop */ "./src/components/dragAndDrop/dragAndDrop.js");
 /* harmony import */ var _counterTask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./counterTask */ "./src/components/createTask/counterTask.js");
-/* harmony import */ var _refreshForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./refreshForm */ "./src/components/createTask/refreshForm.js");
-/* harmony import */ var _saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./saveTasksInLocalStorage */ "./src/components/createTask/saveTasksInLocalStorage.js");
-
+/* harmony import */ var _saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./saveTasksInLocalStorage */ "./src/components/createTask/saveTasksInLocalStorage.js");
 
 
 
 
 const { langData } = __webpack_require__(/*! ../regestration/usersData */ "./src/components/regestration/usersData.js");
 const { getDate } = __webpack_require__(/*! ./getDate */ "./src/components/createTask/getDate.js");
-const { getHexRGBColor } = __webpack_require__(/*! ./rgbToHex */ "./src/components/createTask/rgbToHex.js");
 
 const titleInput = document.getElementById("inputTitle"),
   textInput = document.getElementById("inputText"),
@@ -117,8 +118,7 @@ const titleInput = document.getElementById("inputTitle"),
   completedTasks = document.getElementById("completedTasks"),
   form = document.getElementById("form"),
   sortBtn = document.getElementById("sortBtn"),
-  exampleModalLabel = document.getElementById("exampleModalLabel"),
-  colorInput = document.querySelector(".task__color");
+  exampleModalLabel = document.getElementById("exampleModalLabel");
 
 let counter = 0;
 
@@ -128,10 +128,12 @@ form.addEventListener("submit", (event) => event.preventDefault());
 
 const deleteTask = (elem) => {
   elem.closest(".parent").remove();
+  (0,_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_2__.saveTasksInLocalStorage)();
 };
 
 const completeTask = (elem) => {
   completedTasks.insertAdjacentElement("beforeend", elem.closest(".parent"));
+  (0,_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_2__.saveTasksInLocalStorage)();
 };
 
 const editTask = (elem) => {
@@ -141,7 +143,6 @@ const editTask = (elem) => {
       .textContent.replace(/ .*/, "");
   titleInput.value = container.querySelector(".task__title").textContent;
   textInput.value = container.querySelector(".task__text").textContent;
-  colorInput.value = getHexRGBColor(container.style.backgroundColor);
 
   if (priority == lowInput.value) {
     lowInput.checked = true;
@@ -163,18 +164,33 @@ const hideTaskCompleteBtn = () => {
     .querySelectorAll("#editBtn, #completeBtn")
     .forEach((btn) => btn.classList.add("hide"));
 };
+const showTaskCompleteBtn = () => {
+  currentTasks
+    .querySelectorAll("#editBtn, #completeBtn")
+    .forEach((btn) => btn.classList.remove("hide"));
+};
 
-const createTask = (title, text, prior, color) => {
-  currentTasks.insertAdjacentHTML(
+const createTask = (
+  container,
+  title,
+  text,
+  prior,
+  color,
+  index,
+  date
+) => {
+  container.insertAdjacentHTML(
     "beforeend",
     `
-        <li draggable="true" data-id=${counter++}  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
+        <li draggable="true" data-id=${
+          text + title
+        }  style="background-color : ${color}" class="parent list-group-item d-flex w-100 mb-2">
         <div class="w-100 mr-2">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1 task__title">${title}</h5>
             <div>
-              <small class="mr-2 task__prior">${prior} priority</small>
-              <small class="task__date">${getDate()}</small>
+              <small class="mr-2 task__prior">${prior}</small>
+              <small class="task__date">${date}</small>
             </div>
           </div>
           <p class="mb-1 w-100 task__text">${text}</p>
@@ -212,7 +228,6 @@ function clearForm() {
   lowInput.checked = false;
   mediumInput.checked = false;
   highInput.checked = false;
-  colorInput.value = "#ffffff";
   createTaskBtn.textContent = langData[getCurrentLang].addTask;
   exampleModalLabel.textContent = langData[getCurrentLang].addTask;
 }
@@ -225,8 +240,20 @@ createTaskBtn.addEventListener("click", () => {
     : highInput.checked
     ? highInput.value
     : false;
+  let color = "#fbff65";
+  if (checked === "Medium") color = "#36b6ff";
+  else if (checked === "High") color = "#ff2050";
+  checked = checked + " priority";
   if (titleInput.value != "" && textInput.value != "" && checked) {
-    createTask(titleInput.value, textInput.value, checked, colorInput.value);
+    createTask(
+      currentTasks,
+      titleInput.value,
+      textInput.value,
+      checked,
+      color,
+      counter++,
+      getDate()
+    );
     createTaskBtn.setAttribute("data-dismiss", "modal");
     clearForm();
   }
@@ -234,7 +261,7 @@ createTaskBtn.addEventListener("click", () => {
   setTimeout(() => {
     createTaskBtn.setAttribute("data-dismiss", "");
     (0,_counterTask__WEBPACK_IMPORTED_MODULE_1__.counterCurrentTasks)();
-    (0,_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_3__.saveTasksInLocalStorage)();
+    (0,_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_2__.saveTasksInLocalStorage)();
   }, 100);
 
   addListsnersOnTaskBtn();
@@ -326,73 +353,92 @@ const resetData = () => {
 
 /***/ }),
 
-/***/ "./src/components/createTask/rgbToHex.js":
-/*!***********************************************!*\
-  !*** ./src/components/createTask/rgbToHex.js ***!
-  \***********************************************/
-/*! namespace exports */
-/*! export getHexRGBColor [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getHexRGBColor": () => /* binding */ getHexRGBColor
-/* harmony export */ });
-function getHexRGBColor(color) {
-  color = color.replace(/\s/g, "");
-  var aRGB = color.match(/^rgb\((\d{1,3}[%]?),(\d{1,3}[%]?),(\d{1,3}[%]?)\)$/i);
-
-  if (aRGB) {
-    color = "";
-    for (var i = 1; i <= 3; i++)
-      color += Math.round(
-        (aRGB[i][aRGB[i].length - 1] == "%" ? 2.55 : 1) * parseInt(aRGB[i])
-      )
-        .toString(16)
-        .replace(/^(.)$/, "0$1");
-  } else
-    color = color.replace(/^#?([\da-f])([\da-f])([\da-f])$/i, "$1$1$2$2$3$3");
-
-  return "#" + color;
-}
-
-
-/***/ }),
-
 /***/ "./src/components/createTask/saveTasksInLocalStorage.js":
 /*!**************************************************************!*\
   !*** ./src/components/createTask/saveTasksInLocalStorage.js ***!
   \**************************************************************/
 /*! namespace exports */
+/*! export getTasksFromLocalStorage [provided] [no usage info] [missing usage info prevents renaming] */
 /*! export saveTasksInLocalStorage [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "saveTasksInLocalStorage": () => /* binding */ saveTasksInLocalStorage
+/* harmony export */   "saveTasksInLocalStorage": () => /* binding */ saveTasksInLocalStorage,
+/* harmony export */   "getTasksFromLocalStorage": () => /* binding */ getTasksFromLocalStorage
 /* harmony export */ });
-const saveTasksInLocalStorage = () => {
-  const tasks = [];
-  let arr = currentTasks.querySelectorAll("li");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! . */ "./src/components/createTask/index.js");
+/* harmony import */ var _dragAndDrop_dragAndDrop__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../dragAndDrop/dragAndDrop */ "./src/components/dragAndDrop/dragAndDrop.js");
+/* harmony import */ var _regestration_usersData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../regestration/usersData */ "./src/components/regestration/usersData.js");
+/* harmony import */ var _counterTask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./counterTask */ "./src/components/createTask/counterTask.js");
 
-  [...arr].map((li) =>
-    tasks.push({
+
+
+
+
+const findCollection = (email) => {
+  let index;
+
+  _regestration_usersData__WEBPACK_IMPORTED_MODULE_2__.usersData.map((item, i) => {
+    if (typeof item[email] !== "undefined") {
+      index = i;
+    }
+  });
+  return _regestration_usersData__WEBPACK_IMPORTED_MODULE_2__.usersData[index][email];
+};
+
+const pushData = (arr, path) => {
+  [...arr].map((li) => {
+    path.push({
       counter: li.dataset.id,
-      backgroundColor: li.style.backgroundColor,
       title: li.querySelector(".task__title").textContent,
       text: li.querySelector(".task__text").textContent,
       priority: li.querySelector(".task__prior").textContent,
       date: li.querySelector(".task__date").textContent,
-    })
-  );
+    });
+  });
+};
 
-  window.localStorage.setItem(`tasksData`, JSON.stringify(tasks));
+const drowTasks = (arr, container) => {
+  arr.map((item) => {
+    let color = "#fbff65";
+    if (item.priority === "Medium priority") color = "#36b6ff";
+    else if (item.priority === "High priority") color = "#ff2050";
+    (0,___WEBPACK_IMPORTED_MODULE_0__.createTask)(
+      container,
+      item.title,
+      item.text,
+      item.priority,
+      color,
+      item.counter,
+      item.date
+    );
+  });
+};
+
+const saveTasksInLocalStorage = () => {
+  let data = findCollection(window.sessionStorage.getItem("loginUser"));
+
+  data.tasks = { current: [], completed: [] };
+  pushData(currentTasks.querySelectorAll("li"), data.tasks.current);
+  pushData(completedTasks.querySelectorAll("li"), data.tasks.completed);
+  window.localStorage.setItem("data", JSON.stringify(_regestration_usersData__WEBPACK_IMPORTED_MODULE_2__.usersData));
+};
+
+const getTasksFromLocalStorage = () => {
+  let data = findCollection(window.sessionStorage.getItem("loginUser")),
+    currentTaskkList = data.tasks.current,
+    completedTasksList = data.tasks.completed;
+  drowTasks(currentTaskkList, currentTasks);
+  drowTasks(completedTasksList, completedTasks);
+  (0,___WEBPACK_IMPORTED_MODULE_0__.addListsnersOnTaskBtn)();
+  (0,_counterTask__WEBPACK_IMPORTED_MODULE_3__.counterCurrentTasks)();
+  (0,_counterTask__WEBPACK_IMPORTED_MODULE_3__.counterCompletedTasks)();
+  (0,___WEBPACK_IMPORTED_MODULE_0__.hideTaskCompleteBtn)();
+  (0,_dragAndDrop_dragAndDrop__WEBPACK_IMPORTED_MODULE_1__.dragAndDrop)();
 };
 
 
@@ -423,7 +469,8 @@ __webpack_require__.r(__webpack_exports__);
 const dragAndDrop = () => {
   const currentTasks = document.getElementById("currentTasks"),
     completedTasks = document.getElementById("completedTasks"),
-    list = currentTasks.querySelectorAll("li");
+    list1 = currentTasks.querySelectorAll("li"),
+    list2 = completedTasks.querySelectorAll("li");
 
   completedTasks.ondragover = allowDrop;
   currentTasks.ondragover = allowDrop;
@@ -436,7 +483,10 @@ const dragAndDrop = () => {
     event.dataTransfer.setData("id", event.target.dataset.id);
   }
 
-  [...list].map((item) => {
+  [...list1].map((item) => {
+    item.ondragstart = drag;
+  });
+  [...list2].map((item) => {
     item.ondragstart = drag;
   });
 
@@ -454,7 +504,10 @@ const dragAndDrop = () => {
     ) {
       let id = event.dataTransfer.getData("id");
       let currentElem;
-      [...list].map((elem) => {
+      [...list1].map((elem) => {
+        elem.dataset.id == id ? (currentElem = elem) : "";
+      });
+      [...list2].map((elem) => {
         elem.dataset.id == id ? (currentElem = elem) : "";
       });
       item.append(currentElem);
@@ -462,6 +515,8 @@ const dragAndDrop = () => {
       setTimeout(() => {
         (0,_createTask_saveTasksInLocalStorage__WEBPACK_IMPORTED_MODULE_1__.saveTasksInLocalStorage)();
       }, 100);
+      (0,_createTask_index__WEBPACK_IMPORTED_MODULE_2__.hideTaskCompleteBtn)();
+      (0,_createTask_index__WEBPACK_IMPORTED_MODULE_2__.showTaskCompleteBtn)();
       (0,_createTask_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCurrentTasks)();
       (0,_createTask_counterTask__WEBPACK_IMPORTED_MODULE_0__.counterCompletedTasks)();
       (0,_createTask_index__WEBPACK_IMPORTED_MODULE_2__.addListsnersOnTaskBtn)();
@@ -477,8 +532,12 @@ const dragAndDrop = () => {
   !*** ./src/components/regestration/index.js ***!
   \**********************************************/
 /*! unknown exports (runtime-defined) */
-/*! runtime requirements:  */
-/***/ (() => {
+/*! runtime requirements: __webpack_require__ */
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+const {
+  getTasksFromLocalStorage,
+} = __webpack_require__(/*! ../createTask/saveTasksInLocalStorage */ "./src/components/createTask/saveTasksInLocalStorage.js");
 
 let signInBtn = document.getElementById("register");
 
@@ -491,7 +550,8 @@ if (window.sessionStorage.getItem("logIn")) {
     mainPage = document.querySelector(".col-10"),
     navBarElem = document.querySelector(".navbar__container"),
     regBtn = document.getElementById("register"),
-    userName = document.querySelector(".nameShow");
+    userName = document.querySelector(".name__show");
+  getTasksFromLocalStorage();
 
   greetingElem.classList.add("hide");
   mainPage.classList.remove("hide");
@@ -510,6 +570,7 @@ if (window.sessionStorage.getItem("logIn")) {
 /*! namespace exports */
 /*! export langData [provided] [no usage info] [missing usage info prevents renaming] */
 /*! export saveData [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export usersData [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
 /*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
@@ -517,13 +578,23 @@ if (window.sessionStorage.getItem("logIn")) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "usersData": () => /* binding */ usersData,
 /* harmony export */   "saveData": () => /* binding */ saveData,
 /* harmony export */   "langData": () => /* binding */ langData
 /* harmony export */ });
-let usersData = [];
+let usersData = window.localStorage.getItem("data")
+  ? JSON.parse(window.localStorage.getItem("data"))
+  : [];
 
 const saveData = (mail, name, password) => {
-  usersData.push({ mail: mail, name: name, password: password });
+  usersData.push({
+    [mail]: {
+      mail: mail,
+      name: name,
+      password: password,
+      tasks: { current: [], completed: [] },
+    },
+  });
 
   window.localStorage.setItem("data", JSON.stringify(usersData));
 };
@@ -683,7 +754,6 @@ let signOutBtn = document.getElementById("signOut"),
   greetingTitle = document.querySelector(".greeting__title"),
   greetingText = document.querySelector(".greeting__text"),
   closeText = document.querySelector(".close"),
-  taskColor = document.querySelector(".task__color__text"),
   closeBtn = document.getElementById("closeBtn"),
   addTask = document.querySelectorAll(".addTask__btn"),
   theme = document.getElementById("theme"),
@@ -723,7 +793,6 @@ function changeLang(lang) {
   completeBtn ? (completeBtn.textContent = _components_regestration_usersData__WEBPACK_IMPORTED_MODULE_2__.langData[lang].complete) : "";
   editBtn ? (editBtn.textContent = _components_regestration_usersData__WEBPACK_IMPORTED_MODULE_2__.langData[lang].edit) : "";
   deleteBtn ? (deleteBtn.textContent = _components_regestration_usersData__WEBPACK_IMPORTED_MODULE_2__.langData[lang].delete) : "";
-  taskColor.textContent = _components_regestration_usersData__WEBPACK_IMPORTED_MODULE_2__.langData[lang].color;
   addTask.forEach((elem) => {
     elem.textContent = _components_regestration_usersData__WEBPACK_IMPORTED_MODULE_2__.langData[lang].addTask;
   });

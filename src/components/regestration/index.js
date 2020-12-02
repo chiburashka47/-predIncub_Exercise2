@@ -1,3 +1,7 @@
+const {
+  getTasksFromLocalStorage,
+} = require("../createTask/saveTasksInLocalStorage");
+
 let signInBtn = document.getElementById("register");
 
 signInBtn.addEventListener("click", () => {
@@ -9,7 +13,8 @@ if (window.sessionStorage.getItem("logIn")) {
     mainPage = document.querySelector(".col-10"),
     navBarElem = document.querySelector(".navbar__container"),
     regBtn = document.getElementById("register"),
-    userName = document.querySelector(".nameShow");
+    userName = document.querySelector(".name__show");
+  getTasksFromLocalStorage();
 
   greetingElem.classList.add("hide");
   mainPage.classList.remove("hide");

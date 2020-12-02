@@ -1,4 +1,4 @@
-import { saveData } from "./usersData.js";
+import { saveData, usersData } from "./usersData.js";
 
 let backBtn = document.getElementById("back"),
   name = document.getElementById("name"),
@@ -14,14 +14,9 @@ let backBtn = document.getElementById("back"),
   regContainer = document.getElementById("regContainer"),
   errorMsg = document.querySelectorAll(".reg__container__error");
 
-const userData = window.localStorage.getItem("data")
-  ? JSON.parse(window.localStorage.getItem("data"))[0]
-  : "";
-
 backBtn.addEventListener("click", () => {
   window.location = "/";
 });
-
 const valueCheck = (elem) => {
   if (elem.value == false) {
     return true;
@@ -37,6 +32,27 @@ export const isCorrectEmail = (email) => {
   const regExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regExp.test(email);
 };
+export const checkUser = (email) => {
+  let flag = false;
+
+  usersData.map((item, inxed) => {
+    if (typeof item[email] !== "undefined") {
+      flag = true;
+    }
+  });
+  return flag;
+};
+
+const findCollection = (email) => {
+  let index;
+
+  usersData.map((item, i) => {
+    if (typeof item[email] !== "undefined") {
+      index = i;
+    }
+  });
+  return usersData[index][email];
+};
 
 endRegBtn.addEventListener("click", () => {
   if (valueCheck(name)) {
@@ -45,6 +61,8 @@ endRegBtn.addEventListener("click", () => {
     showError("Please enter the Email!", 1);
   } else if (!isCorrectEmail(email.value)) {
     showError("Incorrect email!", 1);
+  } else if (checkUser(email.value)) {
+    showError("A user with this email is already registered!", 1);
   } else if (valueCheck(password)) {
     showError("Please enter the pasword!", 1);
   } else if (password.value != repPassword.value) {
@@ -53,6 +71,7 @@ endRegBtn.addEventListener("click", () => {
     saveData(email.value, name.value, password.value);
 
     window.sessionStorage.setItem("user name", name.value);
+    window.sessionStorage.setItem("loginUser", email.value);
     window.sessionStorage.setItem("logIn", true);
     window.location = "/";
   }
@@ -64,20 +83,22 @@ goRegBtn.addEventListener("click", () => {
 });
 
 signBtn.addEventListener("click", () => {
-  console.log(userData);
   if (valueCheck(signEmail)) {
     showError("Please enter the Email!", 0);
   } else if (!isCorrectEmail(signEmail.value)) {
     showError("Incorrect email!", 0);
   } else if (valueCheck(singPassword)) {
     showError("Please enter the pasword!", 0);
-  } else if (
-    userData.mail != signEmail.value ||
-    userData.password != singPassword.value
-  ) {
-    showError("Email or password not correct!", 0);
+  } else if (!checkUser(signEmail.value)) {
+    showError("Email is not correct!", 0);
+  } else if (findCollection(signEmail.value).password !== singPassword.value) {
+    showError("Password is not correct!", 0);
   } else {
-    window.sessionStorage.setItem("user name", userData.name);
+    window.sessionStorage.setItem(
+      "user name",
+      findCollection(signEmail.value).name
+    );
+    window.sessionStorage.setItem("loginUser", signEmail.value);
     window.sessionStorage.setItem("logIn", true);
     window.location = "/";
   }
